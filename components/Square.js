@@ -8,7 +8,7 @@ const Square = (props) => {
   const [moleActive, setMoleActive] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
 
-  const randomTime = Math.random() * 40000;
+  const randomTime = Math.random() * 40000 + 1000;
   let timerId;
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const Square = (props) => {
       setMoleActive(true);
       setTimeout(() => {
         setMoleActive(false);
-      }, 1000);
+      }, 1200);
     }, randomTime);
     setTimeout(endGame, 60 * 1000);
   }, []);

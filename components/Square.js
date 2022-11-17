@@ -6,24 +6,27 @@ import { Audio } from "expo-av";
 
 const Square = (props) => {
   const [moleActive, setMoleActive] = useState(false);
-  const [isGameOver, setIsGameOver] = useState(false);
+  // const [isGameOver, setIsGameOver] = useState(false);
+
+  // console.log("props: ", props);
 
   const randomTime = Math.random() * 40000 + 1000;
   let timerId;
 
   useEffect(() => {
+    if (props.isGameOver) return;
     timerId = setInterval(() => {
       setMoleActive(true);
       setTimeout(() => {
         setMoleActive(false);
       }, 1200);
     }, randomTime);
-    setTimeout(endGame, 60 * 1000);
-  }, []);
+    setTimeout(endGame, 61 * 1000);
+  }, [props.isGameOver]);
 
   const endGame = () => {
     clearInterval(timerId);
-    setIsGameOver(true);
+    props.setIsGameOver(true);
   };
 
   const hitSound = require("../assets/sounds/hit.wav");

@@ -1,4 +1,4 @@
-import { ADD_SCORE } from "./actions";
+import { ADD_SCORE, RESET_SCORE } from "./actions";
 
 const initialState = {
   score: 0,
@@ -11,6 +11,8 @@ export const scoreReducer = (state = initialState, action) => {
         ...state,
         score: state.score + 1,
       };
+    case RESET_SCORE:
+      return initialState;
     default:
       return state;
   }

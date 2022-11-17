@@ -7,10 +7,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { connect } from "react-redux";
+import { resetScore } from "../redux";
 import Square from "./Square";
 
 const GameBoard = (props) => {
   const [timeLeft, setTimeLeft] = useState(60);
+  const [isGameOver, setIsGameOver] = useState(false);
+
+  console.log("isGameOver: ", isGameOver);
 
   useEffect(() => {
     if (!timeLeft) return;
@@ -29,16 +33,37 @@ const GameBoard = (props) => {
         source={require("../images/background.jpg")}
       >
         <Text style={styles.title}>Whack-a-mole</Text>
-        <Text
-          style={{
-            fontWeight: "bold",
-            fontSize: 60,
-            marginTop: 10,
-            color: "crimson",
-          }}
-        >
-          {timeLeft}
-        </Text>
+        {isGameOver ? (
+          <TouchableOpacity
+            onPress={() => {
+              setIsGameOver(false);
+              setTimeLeft(60);
+              props.resetScore();
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: 50,
+                marginTop: 10,
+                color: "orangered",
+              }}
+            >
+              START
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 50,
+              marginTop: 10,
+              color: "crimson",
+            }}
+          >
+            {timeLeft}
+          </Text>
+        )}
         <Text
           style={{
             fontWeight: "bold",
@@ -50,6 +75,87 @@ const GameBoard = (props) => {
           {props.score}
         </Text>
         <View style={styles.game}>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          <Square
+            isGameOver={isGameOver}
+            setIsGameOver={setIsGameOver}
+          ></Square>
+          {/* <Square></Square>
           <Square></Square>
           <Square></Square>
           <Square></Square>
@@ -68,8 +174,7 @@ const GameBoard = (props) => {
           <Square></Square>
           <Square></Square>
           <Square></Square>
-          <Square></Square>
-          <Square></Square>
+          <Square></Square> */}
         </View>
       </ImageBackground>
     </View>
@@ -107,4 +212,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(GameBoard);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    resetScore: () => dispatch(resetScore()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);

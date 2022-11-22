@@ -1,80 +1,62 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { connect } from "react-redux";
-import { addScore } from "../redux";
+import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { scoreSlice, isGameOverSlice } from "../redux/slices";
 import { Audio } from "expo-av";
 
-const Square = (props) => {
+const mole = require("../images/mole.png");
+const hole = require("../images/hole.png");
+const hitSound = require("../assets/sounds/hit.wav");
+
+const GAME_TIME = 60;
+
+const Square = () => {
   const [moleActive, setMoleActive] = useState(false);
-  // const [isGameOver, setIsGameOver] = useState(false);
 
-  // console.log("props: ", props);
+  const isGameOver = useSelector((state) => state.isGameOver);
+  const dispatch = useDispatch();
+  const { addScore } = scoreSlice.actions;
+  const { setIsGameOver } = isGameOverSlice.actions;
 
-  const randomTime = Math.random() * 40000 + 1000;
+  const randomTime = Math.random() * 40000 + 1200;
   let timerId;
 
   useEffect(() => {
-    if (props.isGameOver) return;
+    if (isGameOver) return;
     timerId = setInterval(() => {
       setMoleActive(true);
       setTimeout(() => {
         setMoleActive(false);
       }, 1200);
     }, randomTime);
-    setTimeout(endGame, 61 * 1000);
-  }, [props.isGameOver]);
+    setTimeout(endGame, (GAME_TIME + 4) * 1000);
+  }, [isGameOver]);
 
   const endGame = () => {
     clearInterval(timerId);
-    props.setIsGameOver(true);
+    dispatch(setIsGameOver(true));
   };
-
-  const hitSound = require("../assets/sounds/hit.wav");
 
   const playSound = async (currentSound) => {
     const { sound } = await Audio.Sound.createAsync(currentSound);
     await sound.playAsync();
   };
 
+  const onClickMole = () => {
+    playSound(hitSound);
+    dispatch(addScore());
+    setMoleActive(false);
+  };
+
   return (
     <TouchableOpacity
-      // style={styles.square}
       style={moleActive ? styles.mole : styles.square}
-      onPress={
-        moleActive
-          ? () => {
-              playSound(hitSound);
-              props.addScore();
-              setMoleActive(false);
-            }
-          : null
-      }
+      onPress={moleActive ? onClickMole : null}
     >
-      <Image
-        // style={{
-        //   resizeMode: "contain",
-        //   width: 100,
-        //   height: moleActive ? 100 : 37,
-        // }}
-        style={{ width: 80, height: 80 }}
-        source={
-          moleActive
-            ? require("../images/mole.png")
-            : require("../images/hole.png")
-        }
-      />
+      <Image style={styles.image} source={moleActive ? mole : hole} />
     </TouchableOpacity>
   );
 };
-
-// const styles = StyleSheet.create({
-//   square: {
-//     flex: 1,
-//     minWidth: 80,
-//     minHeight: 100,
-//     margin: 5,
-//   },
-// });
 
 const styles = StyleSheet.create({
   square: {
@@ -91,18 +73,10 @@ const styles = StyleSheet.create({
     margin: 10,
     width: "100%",
   },
+  image: {
+    width: 80,
+    height: 80,
+  },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    score: state.score,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addScore: () => dispatch(addScore()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Square);
+export default Square;

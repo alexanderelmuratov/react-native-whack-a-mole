@@ -1,4 +1,11 @@
-import { createStore } from "redux";
-import { scoreReducer } from "./reducer";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { scoreSlice, isGameOverSlice } from "./slices";
 
-export const store = createStore(scoreReducer);
+const rootReducer = combineReducers({
+  score: scoreSlice.reducer,
+  isGameOver: isGameOverSlice.reducer,
+});
+
+export const store = configureStore({
+  reducer: rootReducer,
+});

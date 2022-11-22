@@ -6,15 +6,20 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { connect } from "react-redux";
-import { resetScore } from "../redux";
+import { useSelector, useDispatch } from "react-redux";
+import { scoreSlice, isGameOverSlice } from "../redux/slices";
 import Square from "./Square";
 
-const GameBoard = (props) => {
-  const [timeLeft, setTimeLeft] = useState(60);
-  const [isGameOver, setIsGameOver] = useState(false);
+const GAME_TIME = 60;
 
-  console.log("isGameOver: ", isGameOver);
+const GameBoard = () => {
+  const [timeLeft, setTimeLeft] = useState(GAME_TIME);
+
+  const score = useSelector((state) => state.score);
+  const isGameOver = useSelector((state) => state.isGameOver);
+  const dispatch = useDispatch();
+  const { resetScore } = scoreSlice.actions;
+  const { setIsGameOver } = isGameOverSlice.actions;
 
   useEffect(() => {
     if (!timeLeft) return;
@@ -26,6 +31,12 @@ const GameBoard = (props) => {
     return () => clearInterval(timerId);
   }, [timeLeft]);
 
+  const onClickStart = () => {
+    setTimeLeft(GAME_TIME);
+    dispatch(resetScore());
+    dispatch(setIsGameOver(false));
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -34,128 +45,14 @@ const GameBoard = (props) => {
       >
         <Text style={styles.title}>Whack-a-mole</Text>
         {isGameOver ? (
-          <TouchableOpacity
-            onPress={() => {
-              setIsGameOver(false);
-              setTimeLeft(60);
-              props.resetScore();
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "bold",
-                fontSize: 50,
-                marginTop: 10,
-                color: "orangered",
-              }}
-            >
-              START
-            </Text>
+          <TouchableOpacity onPress={onClickStart}>
+            <Text style={styles.startButton}>START</Text>
           </TouchableOpacity>
         ) : (
-          <Text
-            style={{
-              fontWeight: "bold",
-              fontSize: 50,
-              marginTop: 10,
-              color: "crimson",
-            }}
-          >
-            {timeLeft}
-          </Text>
+          <Text style={styles.counter}>{timeLeft}</Text>
         )}
-        <Text
-          style={{
-            fontWeight: "bold",
-            fontSize: 30,
-            marginTop: 10,
-            color: "indigo",
-          }}
-        >
-          {props.score}
-        </Text>
+        <Text style={styles.score}>{score}</Text>
         <View style={styles.game}>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          <Square
-            isGameOver={isGameOver}
-            setIsGameOver={setIsGameOver}
-          ></Square>
-          {/* <Square></Square>
           <Square></Square>
           <Square></Square>
           <Square></Square>
@@ -174,7 +71,8 @@ const GameBoard = (props) => {
           <Square></Square>
           <Square></Square>
           <Square></Square>
-          <Square></Square> */}
+          <Square></Square>
+          <Square></Square>
         </View>
       </ImageBackground>
     </View>
@@ -204,18 +102,24 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 70,
   },
+  startButton: {
+    fontWeight: "bold",
+    fontSize: 50,
+    marginTop: 10,
+    color: "orangered",
+  },
+  counter: {
+    fontWeight: "bold",
+    fontSize: 50,
+    marginTop: 10,
+    color: "crimson",
+  },
+  score: {
+    fontWeight: "bold",
+    fontSize: 30,
+    marginTop: 10,
+    color: "indigo",
+  },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    score: state.score,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    resetScore: () => dispatch(resetScore()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameBoard);
+export default GameBoard;

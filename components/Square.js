@@ -29,7 +29,7 @@ const Square = () => {
         setMoleActive(false);
       }, 1200);
     }, randomTime);
-    setTimeout(endGame, GAME_TIME * 1000);
+    setTimeout(endGame, (GAME_TIME + 2) * 1000);
   }, [isGameOver]);
 
   const endGame = () => {

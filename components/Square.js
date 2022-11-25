@@ -9,6 +9,7 @@ const hole = require("../images/hole.png");
 const hitSound = require("../assets/sounds/hit.wav");
 
 const GAME_TIME = 60;
+const MOLE_ACTIVE_TIME = 1200;
 
 const Square = () => {
   const [moleActive, setMoleActive] = useState(false);
@@ -18,7 +19,7 @@ const Square = () => {
   const { addScore } = scoreSlice.actions;
   const { setIsGameOver } = isGameOverSlice.actions;
 
-  const randomTime = Math.random() * 40000 + 1200;
+  const randomTime = Math.random() * 40000 + MOLE_ACTIVE_TIME;
   let timerId;
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const Square = () => {
       setMoleActive(true);
       setTimeout(() => {
         setMoleActive(false);
-      }, 1200);
+      }, MOLE_ACTIVE_TIME);
     }, randomTime);
     setTimeout(endGame, (GAME_TIME + 2) * 1000);
   }, [isGameOver]);
@@ -50,7 +51,7 @@ const Square = () => {
 
   return (
     <TouchableOpacity
-      style={moleActive ? styles.mole : styles.square}
+      style={styles.square}
       onPress={moleActive ? onClickMole : null}
     >
       <Image style={styles.image} source={moleActive ? mole : hole} />
@@ -60,13 +61,6 @@ const Square = () => {
 
 const styles = StyleSheet.create({
   square: {
-    flex: 1,
-    minWidth: 80,
-    minHeight: 80,
-    margin: 10,
-    width: "100%",
-  },
-  mole: {
     flex: 1,
     minWidth: 80,
     minHeight: 80,

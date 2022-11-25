@@ -8,11 +8,11 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { scoreSlice, isGameOverSlice } from "../redux/slices";
-import Square from "./Square";
+import { Square } from "./Square";
 
 const GAME_TIME = 60;
 
-const GameBoard = () => {
+export const GameBoard = () => {
   const [timeLeft, setTimeLeft] = useState(GAME_TIME);
 
   const score = useSelector((state) => state.score);
@@ -121,5 +121,3 @@ const styles = StyleSheet.create({
     color: "indigo",
   },
 });
-
-export default GameBoard;

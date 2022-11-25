@@ -11,7 +11,7 @@ const hitSound = require("../assets/sounds/hit.wav");
 const GAME_TIME = 60;
 const MOLE_ACTIVE_TIME = 1200;
 
-const Square = () => {
+export const Square = () => {
   const [moleActive, setMoleActive] = useState(false);
 
   const isGameOver = useSelector((state) => state.isGameOver);
@@ -72,5 +72,3 @@ const styles = StyleSheet.create({
     height: 80,
   },
 });
-
-export default Square;

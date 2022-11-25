@@ -24,12 +24,14 @@ export const Square = () => {
 
   useEffect(() => {
     if (isGameOver) return;
+
     timerId = setInterval(() => {
       setMoleActive(true);
       setTimeout(() => {
         setMoleActive(false);
       }, MOLE_ACTIVE_TIME);
     }, randomTime);
+
     setTimeout(endGame, (GAME_TIME + 2) * 1000);
   }, [isGameOver]);
 
